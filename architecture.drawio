@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-03-03T12:31:50.815Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 YaBrowser/24.1.0.0 Safari/537.36" etag="WHVpFXuAWjlwTCXVLTsY" version="23.1.5" type="github">
+<mxfile host="app.diagrams.net" modified="2024-03-03T12:32:20.836Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 YaBrowser/24.1.0.0 Safari/537.36" etag="bAMG5asrcHoCfbA3jrjK" version="23.1.5" type="github">
   <diagram name="Страница — 1" id="XL13YVDVMJeZTi9-Jwk2">
-    <mxGraphModel dx="763" dy="1690" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="734" dy="1670" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -18,6 +18,9 @@
         </mxCell>
         <mxCell id="xMHgK0UpSn4eUoOwmHlO-6" value="frame" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
           <mxGeometry x="80" y="200" width="240" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="xMHgK0UpSn4eUoOwmHlO-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="xMHgK0UpSn4eUoOwmHlO-7" target="xMHgK0UpSn4eUoOwmHlO-25">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="xMHgK0UpSn4eUoOwmHlO-7" value="frame" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
           <mxGeometry x="360" y="200" width="240" height="280" as="geometry" />
@@ -70,6 +73,9 @@
         </mxCell>
         <mxCell id="xMHgK0UpSn4eUoOwmHlO-26" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;AuthScreen&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ authViewModel: AuthViewModel&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ method(): Type&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="120" y="-80" width="440" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="xMHgK0UpSn4eUoOwmHlO-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.501;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="xMHgK0UpSn4eUoOwmHlO-25" target="xMHgK0UpSn4eUoOwmHlO-6">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
