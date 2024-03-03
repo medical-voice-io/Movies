@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,12 +24,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.android.movies.R
 
 @Composable
-fun AuthScreen() {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+internal fun AuthScreen(
+    authViewModel: AuthViewModel = viewModel()
+) {
+    val state by authViewModel.state.collectAsState()
 
     Column(
         modifier = Modifier
@@ -41,25 +44,25 @@ fun AuthScreen() {
         )
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            value = email,
+            value = state.email,
             label = {
                 Text(
                     text = stringResource(id = R.string.auth_email)
                 )
             },
-            onValueChange = { email = it },
+            onValueChange = authViewModel::onEmailChanged,
             modifier = Modifier
                 .fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            value = password,
+            value = state.password,
             label = {
                 Text(
                     text = stringResource(id = R.string.auth_password)
                 )
             },
-            onValueChange = { password = it },
+            onValueChange = authViewModel::onPasswordChanged,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
