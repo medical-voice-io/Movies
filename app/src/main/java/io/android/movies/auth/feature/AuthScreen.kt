@@ -33,11 +33,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import io.android.movies.R
+import io.android.movies.navigation.Screens
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun AuthScreen(
+    navController: NavController,
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.state.collectAsState()
@@ -119,7 +123,9 @@ internal fun AuthScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             TextButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate(Screens.Reg.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
@@ -134,5 +140,6 @@ internal fun AuthScreen(
 @Preview
 @Composable
 fun AuthScreen_Preview() {
-    AuthScreen()
+    // val navController = rememberNavController()
+    // AuthScreen(navController)
 }
