@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
@@ -105,7 +106,11 @@ internal fun AuthScreen(
                     .fillMaxWidth()
             ) {
                 if (state.isLoading) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        strokeWidth = 2.dp,
+                        modifier = Modifier
+                            .then(Modifier.size(16.dp))
+                    )
                 } else {
                     Text(
                         text = stringResource(id = R.string.auth_login)

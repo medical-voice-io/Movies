@@ -4,6 +4,7 @@ import io.android.movies.auth.interactor.command.AuthCommand
 import io.android.movies.auth.interactor.domain.write.UserLogin
 import io.android.movies.auth.interactor.sync.AuthProjector
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

@@ -17,6 +17,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel экрана авторизации
+ */
 @HiltViewModel
 internal class AuthViewModel @Inject constructor(
     authProjection: AuthProjection,
@@ -37,11 +40,11 @@ internal class AuthViewModel @Inject constructor(
                         // TODO: переход на экран фильмов
                     }
                     .onFailure {
-                        // TODO: отобразить ошибку
                         _event.emit(
                             "Ошибка авторизации: ${it.message}"
                         )
                     }
+                updateLoading(isLoading = false)
             }
             .launchIn(viewModelScope)
     }
@@ -67,6 +70,7 @@ internal class AuthViewModel @Inject constructor(
      */
     fun onLoginClicked() {
         val (email, password) = state.value
+        updateLoading(isLoading = true)
         viewModelScope.launch {
             authAggregate.handleCommand(
                 AuthCommand.Login(
@@ -75,5 +79,9 @@ internal class AuthViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    private fun updateLoading(isLoading: Boolean) {
+        _state.value = _state.value.copy(isLoading = isLoading)
     }
 }
