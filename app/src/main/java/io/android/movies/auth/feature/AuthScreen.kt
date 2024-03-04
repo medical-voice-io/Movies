@@ -36,6 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import io.android.movies.R
+import io.android.movies.auth.feature.event.AuthEvent
 import io.android.movies.navigation.Screens
 import kotlinx.coroutines.launch
 
@@ -50,11 +51,15 @@ internal fun AuthScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        authViewModel.event.collect { text ->
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = text,
-                )
+        authViewModel.event.collect { event ->
+            when(event) {
+                is AuthEvent.ShowMessage -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = event.message,
+                        )
+                    }
+                }
             }
         }
     }
