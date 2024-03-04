@@ -1,4 +1,4 @@
-package io.android.movies.auth.interactor.command
+package io.android.movies.features.auth.interactor.command
 
 /** Комманды экрана авторизации */
 internal sealed interface AuthCommand {

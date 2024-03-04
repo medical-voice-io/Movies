@@ -1,4 +1,4 @@
-package io.android.movies.auth.interactor.repository
+package io.android.movies.features.auth.interactor.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

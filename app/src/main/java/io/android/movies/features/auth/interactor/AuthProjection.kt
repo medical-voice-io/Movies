@@ -1,7 +1,7 @@
-package io.android.movies.auth.interactor
+package io.android.movies.features.auth.interactor
 
 import com.google.firebase.auth.FirebaseUser
-import io.android.movies.auth.interactor.repository.AuthLocalRepository
+import io.android.movies.features.auth.interactor.repository.AuthLocalRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

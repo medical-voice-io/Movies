@@ -1,4 +1,4 @@
-package io.android.movies.reg
+package io.android.movies.features.movies.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -8,15 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun RegScreen() {
+fun MoviesScreen() {
     Scaffold { contentPadding ->
         Box(
-            modifier = Modifier
-                .padding(contentPadding)
+            modifier = Modifier.padding(contentPadding)
         ) {
-            Text(
-                text = "Экран регистрации"
-            )
+            Text("Movies Screen")
         }
     }
 }
