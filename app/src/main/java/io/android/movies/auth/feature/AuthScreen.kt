@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.android.movies.R
+import io.android.movies.auth.feature.event.AuthEvent
 import kotlinx.coroutines.launch
 
 @Composable
@@ -46,11 +47,15 @@ internal fun AuthScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        authViewModel.event.collect { text ->
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = text,
-                )
+        authViewModel.event.collect { event ->
+            when(event) {
+                is AuthEvent.ShowMessage -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = event.message,
+                        )
+                    }
+                }
             }
         }
     }

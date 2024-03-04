@@ -3,6 +3,7 @@ package io.android.movies.auth.feature
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.android.movies.auth.feature.event.AuthEvent
 import io.android.movies.auth.interactor.AuthAggregate
 import io.android.movies.auth.interactor.AuthProjection
 import io.android.movies.auth.interactor.command.AuthCommand
@@ -29,8 +30,8 @@ internal class AuthViewModel @Inject constructor(
     private val _state = MutableStateFlow(AuthState())
     val state: StateFlow<AuthState> = _state.asStateFlow()
 
-    private val _event = MutableSharedFlow<String>()
-    val event: SharedFlow<String> = _event.asSharedFlow()
+    private val _event = MutableSharedFlow<AuthEvent>()
+    val event: SharedFlow<AuthEvent> = _event.asSharedFlow()
 
     init {
         authProjection.observeResultAuthentication()
@@ -41,7 +42,9 @@ internal class AuthViewModel @Inject constructor(
                     }
                     .onFailure {
                         _event.emit(
-                            "Ошибка авторизации: ${it.message}"
+                            AuthEvent.ShowMessage(
+                                message = "Ошибка авторизации: ${it.message}"
+                            )
                         )
                     }
                 updateLoading(isLoading = false)
