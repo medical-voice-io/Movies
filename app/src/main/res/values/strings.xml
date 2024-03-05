@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Movies</string>
+
+    <!--  Общие строки  -->
+    <string name="email">Почта</string>
+    <string name="password">Пароль</string>
+
+    <!--  Строки экрана авторизации  -->
+    <string name="auth_title">Авторизация</string>
+    <string name="auth_email">@string/email</string>
+    <string name="auth_password">@string/password</string>
+    <string name="auth_login">Войти</string>
+    <string name="auth_registration">Зарегистрироваться</string>
 </resources>
