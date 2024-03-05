@@ -1,4 +1,4 @@
-package io.android.movies.auth.interactor.query
+package io.android.movies.features.auth.interactor.query
 
 /** Запрос экрана авторизации */
 internal sealed interface AuthQuery {

@@ -1,4 +1,4 @@
-package io.android.movies.auth.interactor.domain.write
+package io.android.movies.features.auth.interactor.domain.write
 
 /**
  * Модель данных для авторизации

@@ -10,8 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import io.android.movies.auth.feature.AuthScreen
+import io.android.movies.navigation.NavGraph
 import io.android.movies.ui.theme.MoviesTheme
 
 @AndroidEntryPoint
@@ -25,7 +26,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AuthScreen()
+                    val navController = rememberNavController()
+
+                    NavGraph(
+                        navController = navController
+                    )
                 }
             }
         }

@@ -1,4 +1,4 @@
-package io.android.movies.auth.feature
+package io.android.movies.features.auth.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,10 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,13 +30,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.android.movies.R
-import io.android.movies.auth.feature.event.AuthEvent
+import io.android.movies.features.auth.screen.event.AuthEvent
+import io.android.movies.navigation.Screens
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun AuthScreen(
+    navController: NavController,
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.state.collectAsState()
@@ -55,6 +55,9 @@ internal fun AuthScreen(
                             message = event.message,
                         )
                     }
+                }
+                is AuthEvent.OpenMoviesScreen -> {
+                    navController.navigate(Screens.Movies.route)
                 }
             }
         }
@@ -124,7 +127,9 @@ internal fun AuthScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             TextButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate(Screens.Reg.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
@@ -139,5 +144,6 @@ internal fun AuthScreen(
 @Preview
 @Composable
 fun AuthScreen_Preview() {
-    AuthScreen()
+    // val navController = rememberNavController()
+    // AuthScreen(navController)
 }

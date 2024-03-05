@@ -1,4 +1,4 @@
-package io.android.movies.auth.feature
+package io.android.movies.features.auth.screen
 
 /**
  * Состояние экрана авторизации

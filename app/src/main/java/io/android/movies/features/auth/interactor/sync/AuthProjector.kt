@@ -1,8 +1,8 @@
-package io.android.movies.auth.interactor.sync
+package io.android.movies.features.auth.interactor.sync
 
-import io.android.movies.auth.interactor.domain.write.UserLogin
-import io.android.movies.auth.interactor.repository.AuthLocalRepository
-import io.android.movies.auth.interactor.repository.AuthRemoteRepository
+import io.android.movies.features.auth.interactor.domain.write.UserLogin
+import io.android.movies.features.auth.interactor.repository.AuthLocalRepository
+import io.android.movies.features.auth.interactor.repository.AuthRemoteRepository
 import javax.inject.Inject
 
 /**

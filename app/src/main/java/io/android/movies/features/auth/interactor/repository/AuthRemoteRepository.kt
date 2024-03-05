@@ -1,4 +1,4 @@
-package io.android.movies.auth.interactor.repository
+package io.android.movies.features.auth.interactor.repository
 
 import javax.inject.Inject
 

@@ -1,12 +1,12 @@
-package io.android.movies.auth.feature
+package io.android.movies.features.auth.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.android.movies.auth.feature.event.AuthEvent
-import io.android.movies.auth.interactor.AuthAggregate
-import io.android.movies.auth.interactor.AuthProjection
-import io.android.movies.auth.interactor.command.AuthCommand
+import io.android.movies.features.auth.screen.event.AuthEvent
+import io.android.movies.features.auth.interactor.AuthAggregate
+import io.android.movies.features.auth.interactor.AuthProjection
+import io.android.movies.features.auth.interactor.command.AuthCommand
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
