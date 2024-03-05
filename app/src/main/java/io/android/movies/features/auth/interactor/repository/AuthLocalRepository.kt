@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -20,7 +19,9 @@ import kotlin.coroutines.suspendCoroutine
  */
 internal interface AuthLocalRepository {
 
-    val currentUser: StateFlow<FirebaseUser?>
+    val currentUser: FirebaseUser?
+
+    val currentUserFLow: StateFlow<FirebaseUser?>
     val resultAuthentication: SharedFlow<Result<Unit>>
 
     /**
@@ -41,8 +42,11 @@ internal class AuthLocalRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
 ) : AuthLocalRepository {
 
-    private val _currentUser = MutableStateFlow<FirebaseUser?>(null)
-    override val currentUser: StateFlow<FirebaseUser?> = _currentUser.asStateFlow()
+    override val currentUser: FirebaseUser?
+        get() = auth.currentUser
+
+    private val _currentUserFlow = MutableStateFlow<FirebaseUser?>(null)
+    override val currentUserFLow: StateFlow<FirebaseUser?> = _currentUserFlow.asStateFlow()
 
     private val _resultAuthentication = MutableSharedFlow<Result<Unit>>()
     override val resultAuthentication: SharedFlow<Result<Unit>> = _resultAuthentication.asSharedFlow()
@@ -55,7 +59,7 @@ internal class AuthLocalRepositoryImpl @Inject constructor(
             runCatching {
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener {
-                        _currentUser.value = auth.currentUser
+                        _currentUserFlow.value = auth.currentUser
                         continuation.resume(Result.success(Unit))
                     }
                     .addOnFailureListener { error ->
