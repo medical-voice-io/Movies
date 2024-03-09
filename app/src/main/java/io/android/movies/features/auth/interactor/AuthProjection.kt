@@ -9,8 +9,13 @@ internal class AuthProjection @Inject constructor(
     private val authLocalRepository: AuthLocalRepository,
 ) {
 
+    /**
+     * Получить текущего пользователя
+     */
+    fun getCurrentUser(): FirebaseUser? = authLocalRepository.currentUser
+
     /** Получить текущего пользователя */
-    fun observeCurrentUser(): Flow<FirebaseUser?> = authLocalRepository.currentUser
+    fun observeCurrentUser(): Flow<FirebaseUser?> = authLocalRepository.currentUserFLow
 
     /** Подписаться на результат авторизации */
     fun observeResultAuthentication(): Flow<Result<Unit>> = authLocalRepository.resultAuthentication
