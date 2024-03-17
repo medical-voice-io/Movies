@@ -11,4 +11,9 @@
     <string name="auth_password">@string/password</string>
     <string name="auth_login">Войти</string>
     <string name="auth_registration">Зарегистрироваться</string>
+    
+    <!--  Экран списка фильмов  -->
+    <string name="movies_refresh">Обновление данных</string>
+    <string name="movies_error_text">Что-то пошло не так :(</string>
+    <string name="movies_refresh_text">Обновить</string>
 </resources>
