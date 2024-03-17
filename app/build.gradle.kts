@@ -89,6 +89,14 @@ dependencies {
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    // Paging 3
+    val paging_version = "3.2.1"
+    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+    implementation("androidx.paging:paging-compose:$paging_version")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }
 
 // Allow references to generated code
