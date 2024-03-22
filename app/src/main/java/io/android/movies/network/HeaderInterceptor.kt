@@ -19,6 +19,6 @@ internal class HeaderInterceptor @Inject constructor() : Interceptor {
 
     private companion object {
         const val HEADER_API_KEY = "X-API-KEY"
-        const val API_KEY = ""
+        const val API_KEY = "" // TODO: сюда вставить ключ API
     }
 }
