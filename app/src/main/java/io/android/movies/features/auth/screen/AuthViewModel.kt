@@ -38,7 +38,7 @@ internal class AuthViewModel @Inject constructor(
             .onEach { result ->
                 result
                     .onSuccess {
-                        // TODO: переход на экран фильмов
+                        _event.emit(AuthEvent.OpenMoviesScreen)
                     }
                     .onFailure {
                         _event.emit(

@@ -128,6 +128,7 @@ internal fun AuthScreen(
             Spacer(modifier = Modifier.height(16.dp))
             TextButton(
                 onClick = {
+                    navController.popBackStack(Screens.Auth.route, true)
                     navController.navigate(Screens.Reg.route)
                 },
                 modifier = Modifier

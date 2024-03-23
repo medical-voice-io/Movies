@@ -11,7 +11,14 @@
     <string name="auth_password">@string/password</string>
     <string name="auth_login">Войти</string>
     <string name="auth_registration">Зарегистрироваться</string>
-    
+
+    <!--  Строки экрана регистрации  -->
+    <string name="reg_title">Регистрация</string>
+    <string name="reg_email">@string/email</string>
+    <string name="reg_password">@string/password</string>
+    <string name="reg_repeat_password">Повторите пароль</string>
+    <string name="reg_invalid_password">Пароли не совпадают</string>
+
     <!--  Экран списка фильмов  -->
     <string name="movies_refresh">Обновление данных</string>
     <string name="movies_error_text">Что-то пошло не так :(</string>
