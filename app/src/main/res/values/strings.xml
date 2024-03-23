@@ -11,4 +11,9 @@
     <string name="auth_password">@string/password</string>
     <string name="auth_login">Войти</string>
     <string name="auth_registration">Зарегистрироваться</string>
+
+    <!--  Строки экрана авторизации  -->
+    <string name="reg_title">Регистрация</string>
+    <string name="repeat_password">Повторите пароль</string>
+
 </resources>

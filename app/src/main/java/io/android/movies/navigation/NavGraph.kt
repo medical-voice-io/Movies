@@ -24,7 +24,9 @@ fun NavGraph(navController: NavHostController) {
             )
         }
         composable(route = Screens.Reg.route) {
-            RegScreen()
+            RegScreen(
+                navController = navController
+            )
         }
         composable(route = Screens.Movies.route) {
             MoviesScreen()
