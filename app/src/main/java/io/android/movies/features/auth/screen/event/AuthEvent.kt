@@ -12,5 +12,5 @@ internal sealed interface AuthEvent {
     /**
      * Открыть экран списка фильмов
      */
-    object OpenMoviesScreen : AuthEvent
+    data object OpenMoviesScreen : AuthEvent
 }
