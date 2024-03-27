@@ -14,6 +14,8 @@
 
     <!--  Строки экрана авторизации  -->
     <string name="reg_title">Регистрация</string>
-    <string name="repeat_password">Повторите пароль</string>
-
+    <string name="reg_email">@string/email</string>
+    <string name="reg_password">@string/password</string>
+    <string name="reg_repeat_password">Повторите пароль</string>
+    <string name="reg_invalid_password">Пароли не совпадают</string>
 </resources>
