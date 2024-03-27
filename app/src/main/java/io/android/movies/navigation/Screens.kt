@@ -4,7 +4,7 @@ package io.android.movies.navigation
 sealed class Screens(val route: String) {
 
     /** Маршрут экрана сплеша */
-    object Splash : Screens("splash")
+    data object Splash : Screens("splash")
 
     /** Маршрут экрана авторизации */
     data object Auth : Screens("auth")

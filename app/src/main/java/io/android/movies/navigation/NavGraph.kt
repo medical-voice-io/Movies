@@ -29,7 +29,7 @@ fun NavGraph(navController: NavHostController) {
             )
         }
         composable(route = Screens.Movies.route) {
-            MoviesScreen()
+            MoviesScreen(navController = navController)
         }
     }
 }
