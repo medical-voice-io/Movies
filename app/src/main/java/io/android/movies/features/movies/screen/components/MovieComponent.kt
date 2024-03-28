@@ -4,13 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,7 +29,7 @@ internal fun MovieComponent(
     modifier: Modifier = Modifier,
     movie: MovieUi
 ) {
-    Column(
+    Row(
         modifier = modifier
             .fillMaxWidth()
     ) {
@@ -34,29 +37,24 @@ internal fun MovieComponent(
             model = movie.posterUrl,
             contentDescription = null,
             modifier = Modifier
-                .fillMaxWidth()
+                .width(100.dp),
+            contentScale = ContentScale.FillBounds,
         )
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(8.dp)
         ) {
             NameMovieComponent(
                 name = movie.name,
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = movie.year.toString()
-                )
-                Text(
-                    text = movie.rating.toString()
-                )
-            }
+            Text(
+                text = movie.year.toString()
+            )
+            Text(
+                text = movie.rating.toString()
+            )
         }
     }
 }

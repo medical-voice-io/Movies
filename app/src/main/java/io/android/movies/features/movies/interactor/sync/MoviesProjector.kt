@@ -20,6 +20,8 @@ internal class MoviesProjector @Inject constructor(
         config = PagingConfig(
             pageSize = DEFAULT_PAGE_NUMBER,
             initialLoadSize = DEFAULT_PAGE_NUMBER,
+            enablePlaceholders = false,
+            prefetchDistance = 2,
         ),
         remoteMediator = moviesRemoteMediator,
         pagingSourceFactory = { moviesPagingSource }

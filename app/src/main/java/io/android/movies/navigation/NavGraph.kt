@@ -13,7 +13,7 @@ import io.android.movies.features.splash.screen.SplashScreen
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screens.Movies.route,
+        startDestination = Screens.Splash.route,
     ) {
         composable(route = Screens.Splash.route) {
             SplashScreen(navController = navController)

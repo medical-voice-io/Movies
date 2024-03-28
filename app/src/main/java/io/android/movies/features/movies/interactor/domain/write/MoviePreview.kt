@@ -9,9 +9,10 @@ package io.android.movies.features.movies.interactor.domain.write
  * @property previewUrl ссылка на превью
  */
 internal data class MoviePreview(
-    val id: Int,
-    val name: String,
-    val rating: Double,
-    val year: Int,
-    val previewUrl: String,
+    val id: Int = 0,
+    val name: String = "",
+    val rating: Double = 0.0,
+    val year: Int = 0,
+    val previewUrl: String = "",
+    val page: Int = 0,
 )

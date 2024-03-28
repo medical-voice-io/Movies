@@ -10,13 +10,10 @@ import io.android.movies.features.movies.interactor.aggregate.MoviesAggregate
 import io.android.movies.features.movies.interactor.projection.MoviesProjection
 import io.android.movies.features.movies.screen.mappers.MoviePreviewToMovieUiMapper
 import io.android.movies.features.movies.screen.models.MovieUi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 /**
@@ -35,6 +32,7 @@ internal class MoviesViewModel @Inject constructor(
                 pagingData.map(moviePreviewToMovieUiMapper)
             }
             .cachedIn(viewModelScope)
+            .flowOn(Dispatchers.IO)
 
     /**
      * Обновление экрана
