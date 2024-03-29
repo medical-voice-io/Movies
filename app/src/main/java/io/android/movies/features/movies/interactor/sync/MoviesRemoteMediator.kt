@@ -11,6 +11,7 @@ import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
 import io.android.movies.features.movies.interactor.repository.local.MoviesLocalRepository
+import io.android.movies.features.movies.interactor.repository.local.di.FirestoreRepository
 import io.android.movies.features.movies.interactor.repository.local.dto.RemoteKey
 import io.android.movies.features.movies.interactor.repository.remote.MoviesRemoteRepository
 import retrofit2.HttpException
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 internal class MoviesRemoteMediator @Inject constructor(
-    private val localRepository: MoviesLocalRepository,
+    @FirestoreRepository private val localRepository: MoviesLocalRepository,
     private val remoteRepository: MoviesRemoteRepository,
 ) : RemoteMediator<Int, MoviePreview>() {
 
@@ -88,7 +89,7 @@ internal class MoviesRemoteMediator @Inject constructor(
         state: PagingState<Int, MoviePreview>
     ): RemoteKey? = state.anchorPosition?.let { position ->
         state.closestItemToPosition(position)?.id?.let { movieId ->
-            localRepository.getRemoteKeyByMovieId(movieId)
+            localRepository.getRemoteKey(movieId)
         }
     }
 
@@ -97,7 +98,7 @@ internal class MoviesRemoteMediator @Inject constructor(
     ): RemoteKey? = state.pages.firstOrNull {
         it.data.isNotEmpty()
     }?.data?.firstOrNull()?.let { movie ->
-        localRepository.getRemoteKeyByMovieId(movie.id)
+        localRepository.getRemoteKey(movie.id)
     }
 
     private suspend fun getRemoteKeyForLastItem(
@@ -105,6 +106,6 @@ internal class MoviesRemoteMediator @Inject constructor(
     ): RemoteKey? = state.pages.lastOrNull {
         it.data.isNotEmpty()
     }?.data?.lastOrNull()?.let { movie ->
-        localRepository.getRemoteKeyByMovieId(movie.id)
+        localRepository.getRemoteKey(movie.id)
     }
 }

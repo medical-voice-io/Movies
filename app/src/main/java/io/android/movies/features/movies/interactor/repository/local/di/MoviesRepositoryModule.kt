@@ -1,23 +1,38 @@
 package io.android.movies.features.movies.interactor.repository.local.di
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.android.movies.features.movies.interactor.repository.local.MoviesDatabaseRepository
+import io.android.movies.features.movies.interactor.repository.local.MoviesFirestoreRepository
+import io.android.movies.features.movies.interactor.repository.local.MoviesLocalRepository
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DatabaseRepository
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class FirestoreRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object MoviesRepositoryModule {
+internal interface MoviesRepositoryModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideFirebaseDatabase(): FirebaseDatabase = Firebase.database(
-        url = "" // TODO: добавить url к БД firebase
-    )
+    @DatabaseRepository
+    fun bindMoviesDatabaseRepository(
+        repository: MoviesDatabaseRepository,
+    ): MoviesLocalRepository
+
+    @Binds
+    @Singleton
+    @FirestoreRepository
+    fun bindMoviesFirestoreRepository(
+        repository: MoviesFirestoreRepository,
+    ): MoviesLocalRepository
 }

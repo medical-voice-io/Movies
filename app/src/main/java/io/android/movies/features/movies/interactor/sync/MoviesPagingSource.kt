@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
 import io.android.movies.features.movies.interactor.repository.local.MoviesLocalRepository
+import io.android.movies.features.movies.interactor.repository.local.di.FirestoreRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -13,7 +14,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 internal class MoviesPagingSource @Inject constructor(
-    private val localRepository: MoviesLocalRepository,
+    @FirestoreRepository private val localRepository: MoviesLocalRepository,
 ) : PagingSource<Int, MoviePreview>() {
 
     override fun getRefreshKey(
