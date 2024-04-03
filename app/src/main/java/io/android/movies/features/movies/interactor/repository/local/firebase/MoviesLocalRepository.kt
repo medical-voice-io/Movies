@@ -1,4 +1,4 @@
-package io.android.movies.features.movies.interactor.repository.local
+package io.android.movies.features.movies.interactor.repository.local.firebase
 
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
 import io.android.movies.features.movies.interactor.repository.local.dto.RemoteKey

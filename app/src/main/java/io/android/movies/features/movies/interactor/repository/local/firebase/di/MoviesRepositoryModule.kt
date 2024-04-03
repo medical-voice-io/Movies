@@ -1,12 +1,12 @@
-package io.android.movies.features.movies.interactor.repository.local.di
+package io.android.movies.features.movies.interactor.repository.local.firebase.di
 
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.android.movies.features.movies.interactor.repository.local.MoviesDatabaseRepository
-import io.android.movies.features.movies.interactor.repository.local.MoviesFirestoreRepository
-import io.android.movies.features.movies.interactor.repository.local.MoviesLocalRepository
+import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesDatabaseRepository
+import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesFirestoreRepository
+import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository
 import javax.inject.Qualifier
 import javax.inject.Singleton
 

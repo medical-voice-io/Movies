@@ -3,14 +3,10 @@ package io.android.movies.features.movies.interactor.sync
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
-import io.android.movies.features.movies.interactor.repository.local.MoviesLocalRepository
-import io.android.movies.features.movies.interactor.repository.local.di.FirestoreRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository
+import io.android.movies.features.movies.interactor.repository.local.firebase.di.FirestoreRepository
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 internal class MoviesPagingSource @Inject constructor(

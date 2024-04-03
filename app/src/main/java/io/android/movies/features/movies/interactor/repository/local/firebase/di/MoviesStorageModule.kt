@@ -1,4 +1,4 @@
-package io.android.movies.features.movies.interactor.repository.local.di
+package io.android.movies.features.movies.interactor.repository.local.firebase.di
 
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database

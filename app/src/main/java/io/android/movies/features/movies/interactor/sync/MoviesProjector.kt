@@ -4,15 +4,23 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
+import io.android.movies.features.movies.interactor.repository.local.room.MoviesCacheRepository
+import io.android.movies.features.movies.interactor.repository.local.room.entity.MovieEntity
+import io.android.movies.features.movies.interactor.repository.local.room.mappers.MovieEntityToDomainMapper
+import io.android.movies.features.movies.interactor.repository.local.room.mappers.RemoteKeyEntityToDomainMapper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 internal class MoviesProjector @Inject constructor(
     private val moviesRemoteMediator: MoviesRemoteMediator,
+    private val moviesCacheRepository: MoviesCacheRepository,
     private val moviesPagingSource: MoviesPagingSource,
+    private val movieEntityToDomainMapper: MovieEntityToDomainMapper,
 ) {
 
     @OptIn(ExperimentalPagingApi::class)
@@ -24,8 +32,10 @@ internal class MoviesProjector @Inject constructor(
             prefetchDistance = 2,
         ),
         remoteMediator = moviesRemoteMediator,
-        pagingSourceFactory = { moviesPagingSource }
-    ).flow
+        pagingSourceFactory = { moviesCacheRepository.getMoviesPagingSource() }
+    ).flow.map { pagingData ->
+        pagingData.map(movieEntityToDomainMapper)
+    }
 
     private companion object {
         const val DEFAULT_PAGE_NUMBER = 20

@@ -1,18 +1,17 @@
 package io.android.movies.features.movies.interactor.sync
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.MutableData
-import com.google.firebase.database.Transaction
+import androidx.room.withTransaction
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
-import io.android.movies.features.movies.interactor.repository.local.MoviesLocalRepository
-import io.android.movies.features.movies.interactor.repository.local.di.FirestoreRepository
+import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository
+import io.android.movies.features.movies.interactor.repository.local.firebase.di.FirestoreRepository
 import io.android.movies.features.movies.interactor.repository.local.dto.RemoteKey
+import io.android.movies.features.movies.interactor.repository.local.room.MoviesCacheRepository
+import io.android.movies.features.movies.interactor.repository.local.room.database.MoviesDatabase
+import io.android.movies.features.movies.interactor.repository.local.room.entity.MovieEntity
 import io.android.movies.features.movies.interactor.repository.remote.MoviesRemoteRepository
 import retrofit2.HttpException
 import java.io.IOException
@@ -21,12 +20,14 @@ import javax.inject.Inject
 @OptIn(ExperimentalPagingApi::class)
 internal class MoviesRemoteMediator @Inject constructor(
     @FirestoreRepository private val localRepository: MoviesLocalRepository,
+    private val moviesDatabase: MoviesDatabase,
+    private val moviesCacheRepository: MoviesCacheRepository,
     private val remoteRepository: MoviesRemoteRepository,
-) : RemoteMediator<Int, MoviePreview>() {
+) : RemoteMediator<Int, MovieEntity>() {
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, MoviePreview>
+        state: PagingState<Int, MovieEntity>
     ): MediatorResult {
         val loadPage: Int = when (loadType) {
             LoadType.REFRESH -> {
@@ -54,26 +55,28 @@ internal class MoviesRemoteMediator @Inject constructor(
             val movies = response.movies
             val endOfPaginationReached = response.movies.isEmpty()
 
-            if (loadType == LoadType.REFRESH) {
-                localRepository.clearMovies()
-                localRepository.clearRemoteKeys()
-            }
-            val prevKey = if (loadPage > 1) loadPage - 1 else null
-            val nextKey = if (endOfPaginationReached) null else loadPage + 1
-            val remoteKeys = movies.map { movie ->
-                RemoteKey(
-                    moviesId = movie.id,
-                    prevKey = prevKey,
-                    currentPage = loadPage,
-                    nextKey = nextKey,
+            moviesDatabase.withTransaction {
+                if (loadType == LoadType.REFRESH) {
+                    moviesCacheRepository.deleteMovies()
+                    moviesCacheRepository.deleteRemoteKeys()
+                }
+                val prevKey = if (loadPage > 1) loadPage - 1 else null
+                val nextKey = if (endOfPaginationReached) null else loadPage + 1
+                val remoteKeys = movies.map { movie ->
+                    RemoteKey(
+                        moviesId = movie.id,
+                        prevKey = prevKey,
+                        currentPage = loadPage,
+                        nextKey = nextKey,
+                    )
+                }
+                moviesCacheRepository.insetRemoteKeys(remoteKeys)
+                moviesCacheRepository.insertMovies(
+                    movies = movies.map { movie ->
+                        movie.copy(page = loadPage)
+                    }
                 )
             }
-            localRepository.insertRemoteKeys(remoteKeys)
-            localRepository.insetMovies(
-                movies.map { movie ->
-                    movie.copy(page = loadPage)
-                }
-            )
 
             MediatorResult.Success(
                 endOfPaginationReached = endOfPaginationReached
@@ -86,26 +89,26 @@ internal class MoviesRemoteMediator @Inject constructor(
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, MoviePreview>
+        state: PagingState<Int, MovieEntity>
     ): RemoteKey? = state.anchorPosition?.let { position ->
         state.closestItemToPosition(position)?.id?.let { movieId ->
-            localRepository.getRemoteKey(movieId)
+            moviesCacheRepository.getRemoteKey(movieId)
         }
     }
 
     private suspend fun getRemoteKeyForFirstItem(
-        state: PagingState<Int, MoviePreview>
+        state: PagingState<Int, MovieEntity>
     ): RemoteKey? = state.pages.firstOrNull {
         it.data.isNotEmpty()
     }?.data?.firstOrNull()?.let { movie ->
-        localRepository.getRemoteKey(movie.id)
+        moviesCacheRepository.getRemoteKey(movie.id)
     }
 
     private suspend fun getRemoteKeyForLastItem(
-        state: PagingState<Int, MoviePreview>
+        state: PagingState<Int, MovieEntity>
     ): RemoteKey? = state.pages.lastOrNull {
         it.data.isNotEmpty()
     }?.data?.lastOrNull()?.let { movie ->
-        localRepository.getRemoteKey(movie.id)
+        moviesCacheRepository.getRemoteKey(movie.id)
     }
 }

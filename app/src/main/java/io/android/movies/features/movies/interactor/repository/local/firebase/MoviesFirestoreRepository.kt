@@ -1,14 +1,12 @@
-package io.android.movies.features.movies.interactor.repository.local
+package io.android.movies.features.movies.interactor.repository.local.firebase
 
 import android.util.Log
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
-import io.android.movies.features.movies.interactor.repository.local.MoviesLocalRepository.Companion.CHILD_MOVIES
-import io.android.movies.features.movies.interactor.repository.local.MoviesLocalRepository.Companion.CHILD_REMOTE_KEY
+import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository.Companion.CHILD_MOVIES
+import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository.Companion.CHILD_REMOTE_KEY
 import io.android.movies.features.movies.interactor.repository.local.dto.RemoteKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
