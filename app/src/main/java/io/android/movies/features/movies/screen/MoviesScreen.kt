@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
@@ -17,8 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,12 +24,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import io.android.movies.R
-import io.android.movies.features.movies.screen.components.MovieComponent
-import io.android.movies.features.movies.screen.components.RefreshComponent
+import io.android.movies.features.movies.screen.components.MovieVerticalComponent
 import io.android.movies.features.movies.screen.models.MovieUi
-import io.android.movies.navigation.Screens
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -40,8 +36,6 @@ internal fun MoviesScreen(
     navController: NavController,
     viewModel: MoviesViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.moviesState.collectAsState()
-
     Scaffold { contentPadding ->
         Column(
             modifier = Modifier
@@ -49,29 +43,11 @@ internal fun MoviesScreen(
                 .padding(contentPadding)
         ) {
             // TODO: Добавить строку поиска
-            when(state) {
-                is MoviesState.MainLoading -> MoviesLoadingState()
-                is MoviesState.MainError -> MoviesErrorState {
-                    viewModel.refresh()
-                }
-                is MoviesState.ShowMovies -> MoviesContentState(
-                    moviesFlow = viewModel.moviesFlow
-                )
-            }
+            MoviesContentState(
+                moviesFlow = viewModel.moviesFlow,
+            )
         }
     }
-}
-
-/**
- * Состояние загрузки экрана
- */
-@Composable
-internal fun MoviesLoadingState() {
-    CircularProgressIndicator(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    )
 }
 
 /**
@@ -107,26 +83,77 @@ internal fun MoviesErrorState(
  */
 @Composable
 internal fun MoviesContentState(
-    moviesFlow: Flow<PagingData<MovieUi>>
+    moviesFlow: Flow<PagingData<MovieUi>>,
 ) {
     val movies = moviesFlow.collectAsLazyPagingItems()
-    
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-        if (movies.loadState.refresh is LoadState.Loading) {
-            item {
-                RefreshComponent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                )
-            }
-        }
 
+    val isLoading = movies.loadState.refresh is LoadState.Loading
+    when {
+        isLoading && movies.itemCount == 0 -> {
+            MoviesLoadingState()
+        }
+        !isLoading && movies.itemCount == 0 -> {
+            EmptyStateComponent(
+                onRefreshClicked = movies::refresh
+            )
+        }
+        else -> {
+            MoviesListComponent(movies)
+        }
+    }
+}
+
+/**
+ * Состояние загрузки экрана
+ */
+@Composable
+internal fun MoviesLoadingState() {
+    CircularProgressIndicator(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
+    )
+}
+
+@Composable
+fun EmptyStateComponent(
+    onRefreshClicked: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(id = R.string.movies_empty_text)
+        )
+        TextButton(
+            onClick = onRefreshClicked
+        ) {
+            Text(
+                text = stringResource(id = R.string.movies_refresh)
+            )
+        }
+    }
+}
+
+@Composable
+internal fun MoviesListComponent(
+    movies: LazyPagingItems<MovieUi>
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         items(
             count = movies.itemCount
         ) { index ->
             movies[index]?.let { movie ->
-                MovieComponent(movie = movie)
+                MovieVerticalComponent(movie = movie)
             }
         }
 
@@ -143,15 +170,6 @@ internal fun MoviesContentState(
 
     // TODO: обучный список
     // LazyColumn {
-    //     if (movies.loadState.refresh is LoadState.Loading) {
-    //         item {
-    //             RefreshComponent(
-    //                 modifier = Modifier
-    //                     .fillMaxWidth()
-    //                     .padding(horizontal = 16.dp)
-    //             )
-    //         }
-    //     }
     //
     //     items(
     //         count = movies.itemCount
@@ -161,13 +179,77 @@ internal fun MoviesContentState(
     //         }
     //     }
     //
-    //     if (movies.loadState.append is LoadState.Loading) {
-    //         item {
-    //             CircularProgressIndicator(
+    //     val loadState = movies.loadState.mediator
+    //     item {
+    //         if (loadState?.refresh is LoadState.Loading) {
+    //             Column(
+    //                 modifier = Modifier
+    //                     .fillParentMaxSize(),
+    //                 horizontalAlignment = Alignment.CenterHorizontally,
+    //                 verticalArrangement = Arrangement.Center,
+    //             ) {
+    //                 Text(
+    //                     modifier = Modifier
+    //                         .padding(8.dp),
+    //                     text = stringResource(id = R.string.movies_refresh)
+    //                 )
+    //
+    //                 CircularProgressIndicator()
+    //             }
+    //         }
+    //
+    //         if (loadState?.append is LoadState.Loading) {
+    //             Box(
     //                 modifier = Modifier
     //                     .fillMaxWidth()
-    //                     .wrapContentWidth(Alignment.CenterHorizontally)
-    //             )
+    //                     .padding(16.dp),
+    //                 contentAlignment = Alignment.Center,
+    //             ) {
+    //                 CircularProgressIndicator()
+    //             }
+    //         }
+    //
+    //         if (loadState?.refresh is LoadState.Error || loadState?.append is LoadState.Error) {
+    //             val isPaginatingError = (loadState.append is LoadState.Error) || movies.itemCount > 1
+    //             val error = if (loadState.append is LoadState.Error)
+    //                 (loadState.append as LoadState.Error).error
+    //             else
+    //                 (loadState.refresh as LoadState.Error).error
+    //
+    //             val modifier = if (isPaginatingError) {
+    //                 Modifier.padding(8.dp)
+    //             } else {
+    //                 Modifier.fillParentMaxSize()
+    //             }
+    //             Column(
+    //                 modifier = modifier,
+    //                 verticalArrangement = Arrangement.Center,
+    //                 horizontalAlignment = Alignment.CenterHorizontally,
+    //             ) {
+    //                 if (!isPaginatingError) {
+    //                     Icon(
+    //                         modifier = Modifier
+    //                             .size(64.dp),
+    //                         imageVector = Icons.Rounded.Warning, contentDescription = null
+    //                     )
+    //                 }
+    //
+    //                 Text(
+    //                     modifier = Modifier
+    //                         .padding(8.dp),
+    //                     text = error.message ?: error.toString(),
+    //                     textAlign = TextAlign.Center,
+    //                 )
+    //
+    //                 Button(
+    //                     onClick = {
+    //                         movies.refresh()
+    //                     },
+    //                     content = {
+    //                         Text(text = "Refresh")
+    //                     }
+    //                 )
+    //             }
     //         }
     //     }
     // }

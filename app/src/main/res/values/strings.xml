@@ -20,7 +20,8 @@
     <string name="reg_invalid_password">Пароли не совпадают</string>
 
     <!--  Экран списка фильмов  -->
-    <string name="movies_refresh">Обновление данных</string>
+    <string name="movies_refresh">Обновить</string>
     <string name="movies_error_text">Что-то пошло не так :(</string>
     <string name="movies_refresh_text">Обновить</string>
+    <string name="movies_empty_text">Фильмы не найдены</string>
 </resources>
