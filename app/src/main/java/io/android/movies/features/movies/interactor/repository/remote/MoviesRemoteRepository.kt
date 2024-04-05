@@ -15,8 +15,10 @@ internal class MoviesRemoteRepository @Inject constructor(
      * Получить фильмы
      * @param page номер страницы
      */
-    suspend fun getMovies(page: Int): MoviesData = withContext(Dispatchers.IO) {
-        val response = moviesApi.getMovies(page)
-        moviesDataResponseToMoviePreviewMapper(response)
+    suspend fun getMovies(page: Int): Result<MoviesData> = withContext(Dispatchers.IO) {
+        runCatching {
+            val response = moviesApi.getMovies(page)
+            moviesDataResponseToMoviePreviewMapper(response)
+        }
     }
 }

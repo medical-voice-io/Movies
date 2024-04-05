@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
 import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository.Companion.CHILD_MOVIES
 import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository.Companion.CHILD_REMOTE_KEY
@@ -26,12 +27,14 @@ internal class MoviesFirestoreRepository @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             val userDocument = getUserDocument()
-            val batch = database.batch()
-            movies.forEach { movie ->
-                val movieDocRef = userDocument.collection(CHILD_MOVIES).document()
-                batch.set(movieDocRef, movie)
+            database.runBatch { batch ->
+                movies.forEach { movie ->
+                    val movieDocRef = userDocument
+                        .collection(CHILD_MOVIES)
+                        .document(movie.id.toString())
+                    batch.set(movieDocRef, movie, SetOptions.merge())
+                }
             }
-            batch.commit()
                 .addOnSuccessListener {
                     continuation.resume(Unit)
                 }
@@ -59,11 +62,11 @@ internal class MoviesFirestoreRepository @Inject constructor(
                 .collection(CHILD_MOVIES)
                 .get()
                 .addOnSuccessListener { snapshot ->
-                    val batch = database.batch()
-                    snapshot.documents.forEach { document ->
-                        batch.delete(document.reference)
+                    database.runBatch { batch ->
+                        snapshot.documents.forEach { document ->
+                            batch.delete(document.reference)
+                        }
                     }
-                    batch.commit()
                         .addOnSuccessListener {
                             continuation.resume(Unit)
                         }
@@ -84,13 +87,13 @@ internal class MoviesFirestoreRepository @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             val userDocument = getUserDocument()
-            val batch = database.batch()
 
-            remoteKeys.forEach { remoteKey ->
-                val remoteKeyDocRef = userDocument.collection(CHILD_REMOTE_KEY).document()
-                batch.set(remoteKeyDocRef, remoteKey)
+            database.runBatch { batch ->
+                remoteKeys.forEach { remoteKey ->
+                    val remoteKeyDocRef = userDocument.collection(CHILD_REMOTE_KEY).document()
+                    batch.set(remoteKeyDocRef, remoteKey)
+                }
             }
-            batch.commit()
                 .addOnSuccessListener {
                     continuation.resume(Unit)
                 }
@@ -119,11 +122,11 @@ internal class MoviesFirestoreRepository @Inject constructor(
                 .collection(CHILD_REMOTE_KEY)
                 .get()
                 .addOnSuccessListener { snapshot ->
-                    val batch = database.batch()
-                    snapshot.documents.forEach { document ->
-                        batch.delete(document.reference)
+                    database.runBatch { batch ->
+                        snapshot.documents.forEach { document ->
+                            batch.delete(document.reference)
+                        }
                     }
-                    batch.commit()
                         .addOnSuccessListener {
                             continuation.resume(Unit)
                         }

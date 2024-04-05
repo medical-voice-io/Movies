@@ -33,11 +33,4 @@ internal class MoviesViewModel @Inject constructor(
             }
             .cachedIn(viewModelScope)
             .flowOn(Dispatchers.IO)
-
-    /**
-     * Обновление экрана
-     */
-    fun refresh() {
-        // TODO: реализовать перезагрузку экрана
-    }
 }

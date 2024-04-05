@@ -51,9 +51,13 @@ internal class MoviesRemoteMediator @Inject constructor(
         }
 
         return try {
-            val response = remoteRepository.getMovies(page = loadPage)
-            val movies = response.movies
-            val endOfPaginationReached = response.movies.isEmpty()
+            val movies = remoteRepository.getMovies(page = loadPage)
+                .map { moviesData ->
+                    moviesData.movies.mapWithPage(loadPage)
+                }
+                .onSuccess { movies -> localRepository.insetMovies(movies) }
+                .getOrElse { localRepository.getMovies(page = loadPage) }
+            val endOfPaginationReached = movies.isEmpty()
 
             moviesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -71,11 +75,7 @@ internal class MoviesRemoteMediator @Inject constructor(
                     )
                 }
                 moviesCacheRepository.insetRemoteKeys(remoteKeys)
-                moviesCacheRepository.insertMovies(
-                    movies = movies.map { movie ->
-                        movie.copy(page = loadPage)
-                    }
-                )
+                moviesCacheRepository.insertMovies(movies)
             }
 
             MediatorResult.Success(
@@ -110,5 +110,9 @@ internal class MoviesRemoteMediator @Inject constructor(
         it.data.isNotEmpty()
     }?.data?.lastOrNull()?.let { movie ->
         moviesCacheRepository.getRemoteKey(movie.id)
+    }
+
+    private fun List<MoviePreview>.mapWithPage(page: Int): List<MoviePreview> = map { movie ->
+        movie.copy(page = page)
     }
 }
