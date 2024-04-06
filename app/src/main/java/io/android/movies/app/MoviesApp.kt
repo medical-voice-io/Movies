@@ -15,6 +15,7 @@ class MoviesApp : Application() {
         super.onCreate()
 
         FirebaseApp.initializeApp(this)
+        setupActivityListener()
     }
 
     private fun setupActivityListener() {
