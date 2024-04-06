@@ -21,9 +21,9 @@ internal interface MoviesApi {
         @Query("page") page: Int,
     ): MoviesDataResponse
 
-    @GET(SEARCH_MOVIES)
+    @GET(MOVIES)
     suspend fun searchMovies(
         @Query("keyword") keyword: String,
         @Query("page") page: Int,
-    ): SearchMoviesDataResponse
+    ): MoviesDataResponse
 }

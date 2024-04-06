@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.android.movies.features.movies.interactor.aggregate.MoviesAggregate
@@ -11,6 +12,7 @@ import io.android.movies.features.movies.interactor.aggregate.command.MoviesComm
 import io.android.movies.features.movies.interactor.domain.write.Favorite
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
 import io.android.movies.features.movies.interactor.projection.MoviesProjection
+import io.android.movies.features.movies.screen.combiners.MoviesCombiner
 import io.android.movies.features.movies.screen.mappers.MoviePreviewToMovieUiMapper
 import io.android.movies.features.movies.screen.models.MovieUi
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +75,15 @@ internal class MoviesViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Обработка изменения фильтра
+     */
+    fun onFilterChange(needFilterMovies: Boolean) {
+        _uiState.update { state ->
+            state.copy(isFilterEnabled = needFilterMovies)
+        }
+    }
+
     @OptIn(FlowPreview::class)
     private fun observeSearchQuery() {
         viewModelScope.launch {
@@ -91,11 +102,16 @@ internal class MoviesViewModel @Inject constructor(
     private fun observeMovies() {
         viewModelScope.launch {
             combine(
+                uiState,
                 moviesProjection.getFavoriteFlow(),
                 moviesProjection.getPagingMoviesFlow()
                     .cachedIn(viewModelScope),
-            ) { favorites, pagingData ->
-                favorites to pagingData
+            ) { state, favorites, pagingData ->
+                MoviesCombiner(
+                    isFilterEnabled = state.isFilterEnabled,
+                    favorites = favorites,
+                    pagingData = pagingData
+                )
             }.updateState()
         }
     }
@@ -105,20 +121,34 @@ internal class MoviesViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             combine(
+                uiState,
                 moviesProjection.getFavoriteFlow(),
                 moviesProjection.getSearchMoviesPagingFlow(searchQuery)
                     .cachedIn(viewModelScope),
-            ) { favorites, pagingData ->
-                favorites to pagingData
+            ) { state, favorites, pagingData ->
+                MoviesCombiner(
+                    isFilterEnabled = state.isFilterEnabled,
+                    favorites = favorites,
+                    pagingData = pagingData
+                )
             }.updateState()
         }
     }
 
-    private suspend fun Flow<Pair<List<Favorite>, PagingData<MoviePreview>>>.updateState() =
-        map { (favorites, pagingData) ->
-            pagingData.map { movie ->
-                moviePreviewToMovieUiMapper(favorites, movie)
-            }
+    private suspend fun Flow<MoviesCombiner>.updateState() =
+        map { data ->
+            val (isFilterEnabled, favorites, pagingData) = data
+            pagingData
+                .filter { movie ->
+                    if (isFilterEnabled) {
+                        favorites.any { it.movieId == movie.id }
+                    } else {
+                        true
+                    }
+                }
+                .map { movie ->
+                    moviePreviewToMovieUiMapper(favorites, movie)
+                }
         }
             .flowOn(Dispatchers.IO)
             .collect { pagingData ->

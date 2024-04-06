@@ -2,19 +2,25 @@ package io.android.movies.features.movies.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,34 +53,76 @@ internal fun MoviesScreen(
     Scaffold { contentPadding ->
 
         val state by viewModel.uiState.collectAsState()
+        val moviesListeners = MoviesListeners(
+            favoriteListener = viewModel::onFavoriteChanged,
+            searchListener = viewModel::onSearchQueryChanged,
+            filterListener = viewModel::onFilterChange,
+        )
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            TextField(
-                value = state.searchQuery,
-                onValueChange = viewModel::onSearchQueryChanged,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null
-                    )
-                },
-                placeholder = {
-                    Text(text = stringResource(id = R.string.movies_search_hint))
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp)
+            ToolbarComponent(
+                state = state,
+                moviesListeners = moviesListeners,
             )
             MoviesContentState(
                 moviesFlow = viewModel.moviesFlow,
-                moviesListeners = MoviesListeners(
-                    favoriteListener = viewModel::onFavoriteChanged
+                moviesListeners = moviesListeners,
+            )
+        }
+    }
+}
+
+/**
+ * Toolbar экрана списка фильмов
+ */
+@Composable
+internal fun ToolbarComponent(
+    state: MoviesState,
+    moviesListeners: MoviesListeners,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .padding(top = 16.dp)
+    ) {
+        TextField(
+            value = state.searchQuery,
+            onValueChange = moviesListeners.searchListener::onChange,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null
                 )
+            },
+            placeholder = {
+                Text(text = stringResource(id = R.string.movies_search_hint))
+            },
+            modifier = Modifier
+                .weight(1f)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        IconButton(
+            onClick = {
+                moviesListeners.filterListener.onChange(
+                    needFilter = !state.isFilterEnabled
+                )
+            }
+        ) {
+            val tint = if (state.isFilterEnabled) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.outline
+            }
+
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                tint = tint,
+                contentDescription = null,
             )
         }
     }

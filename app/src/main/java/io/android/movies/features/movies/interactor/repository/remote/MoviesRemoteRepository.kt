@@ -31,7 +31,7 @@ internal class MoviesRemoteRepository @Inject constructor(
     ): Result<List<MoviePreview>> = withContext(Dispatchers.IO) {
         runCatching {
             val response = moviesApi.searchMovies(keyword, page)
-            searchMoviesDataResponseToDomainMapper(response)
+            moviesDataResponseToMoviePreviewMapper(response).movies
         }
     }
 }

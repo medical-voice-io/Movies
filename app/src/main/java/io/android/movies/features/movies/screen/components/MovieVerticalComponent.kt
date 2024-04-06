@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -109,30 +110,31 @@ internal fun MovieVerticalComponent(
                 )
             }
         }
-        Box(
+        IconButton(
+            onClick = {
+                favoriteListener.onChange(movie)
+            },
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(8.dp)
-                .clickable {
-                    favoriteListener.onChange(movie)
-                }
         ) {
-            val color = if (movie.isFavorite) {
-                Color.Red
-            } else {
-                Color.White
-            }
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                tint = color,
-                contentDescription = null,
-            )
-            if (!movie.isFavorite) {
+            Box {
+                val color = if (movie.isFavorite) {
+                    Color.Red
+                } else {
+                    Color.White
+                }
                 Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    tint = Color.Gray,
+                    imageVector = Icons.Default.Favorite,
+                    tint = color,
                     contentDescription = null,
                 )
+                if (!movie.isFavorite) {
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        tint = Color.Gray,
+                        contentDescription = null,
+                    )
+                }
             }
         }
     }
