@@ -7,4 +7,5 @@ internal object MoviesUrls {
     private const val API_VERSION = "/api/v2.2"
 
     const val MOVIES = "$API_VERSION/films"
+    const val SEARCH_MOVIES = "$MOVIES/search-by-keyword"
 }

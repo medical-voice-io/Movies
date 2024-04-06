@@ -11,11 +11,17 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -37,12 +43,31 @@ internal fun MoviesScreen(
     viewModel: MoviesViewModel = hiltViewModel(),
 ) {
     Scaffold { contentPadding ->
+
+        val state by viewModel.uiState.collectAsState()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            // TODO: Добавить строку поиска
+            TextField(
+                value = state.searchQuery,
+                onValueChange = viewModel::onSearchQueryChanged,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.movies_search_hint))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp)
+            )
             MoviesContentState(
                 moviesFlow = viewModel.moviesFlow,
             )
@@ -92,11 +117,13 @@ internal fun MoviesContentState(
         isLoading && movies.itemCount == 0 -> {
             MoviesLoadingState()
         }
+
         !isLoading && movies.itemCount == 0 -> {
             EmptyStateComponent(
                 onRefreshClicked = movies::refresh
             )
         }
+
         else -> {
             MoviesListComponent(movies)
         }

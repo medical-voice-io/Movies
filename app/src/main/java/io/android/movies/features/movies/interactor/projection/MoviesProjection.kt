@@ -8,4 +8,8 @@ internal class MoviesProjection @Inject constructor(
 ) {
 
     fun getPagingMoviesFlow() = moviesProjector.getMoviesFlow()
+
+    fun getSearchMoviesPagingFlow(
+        keyword: String,
+    ) = moviesProjector.searchMovies(keyword)
 }
