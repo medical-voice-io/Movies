@@ -34,6 +34,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import io.android.movies.R
 import io.android.movies.features.movies.screen.components.MovieVerticalComponent
+import io.android.movies.features.movies.screen.listeners.MoviesListeners
 import io.android.movies.features.movies.screen.models.MovieUi
 import kotlinx.coroutines.flow.Flow
 
@@ -70,6 +71,9 @@ internal fun MoviesScreen(
             )
             MoviesContentState(
                 moviesFlow = viewModel.moviesFlow,
+                moviesListeners = MoviesListeners(
+                    favoriteListener = viewModel::onFavoriteChanged
+                )
             )
         }
     }
@@ -109,6 +113,7 @@ internal fun MoviesErrorState(
 @Composable
 internal fun MoviesContentState(
     moviesFlow: Flow<PagingData<MovieUi>>,
+    moviesListeners: MoviesListeners,
 ) {
     val movies = moviesFlow.collectAsLazyPagingItems()
 
@@ -125,7 +130,10 @@ internal fun MoviesContentState(
         }
 
         else -> {
-            MoviesListComponent(movies)
+            MoviesListComponent(
+                movies = movies,
+                moviesListeners = moviesListeners
+            )
         }
     }
 }
@@ -167,7 +175,8 @@ fun EmptyStateComponent(
 
 @Composable
 internal fun MoviesListComponent(
-    movies: LazyPagingItems<MovieUi>
+    movies: LazyPagingItems<MovieUi>,
+    moviesListeners: MoviesListeners,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -180,7 +189,10 @@ internal fun MoviesListComponent(
             count = movies.itemCount
         ) { index ->
             movies[index]?.let { movie ->
-                MovieVerticalComponent(movie = movie)
+                MovieVerticalComponent(
+                    movie = movie,
+                    favoriteListener = moviesListeners.favoriteListener
+                )
             }
         }
 

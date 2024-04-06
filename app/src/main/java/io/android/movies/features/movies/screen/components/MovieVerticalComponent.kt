@@ -1,17 +1,20 @@
 package io.android.movies.features.movies.screen.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,11 +31,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import io.android.movies.features.movies.screen.listeners.FavoriteListener
 import io.android.movies.features.movies.screen.models.MovieUi
 
 @Composable
 internal fun MovieVerticalComponent(
     movie: MovieUi,
+    favoriteListener: FavoriteListener,
 ) {
     Box(
         modifier = Modifier
@@ -101,6 +106,32 @@ internal fun MovieVerticalComponent(
                 Text(
                     text = movie.rating.toString(),
                     fontSize = 12.sp,
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+                .clickable {
+                    favoriteListener.onChange(movie)
+                }
+        ) {
+            val color = if (movie.isFavorite) {
+                Color.Red
+            } else {
+                Color.White
+            }
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                tint = color,
+                contentDescription = null,
+            )
+            if (!movie.isFavorite) {
+                Icon(
+                    imageVector = Icons.Default.FavoriteBorder,
+                    tint = Color.Gray,
+                    contentDescription = null,
                 )
             }
         }
