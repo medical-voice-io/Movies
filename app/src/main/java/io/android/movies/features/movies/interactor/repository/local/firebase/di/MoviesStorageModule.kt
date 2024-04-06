@@ -18,7 +18,7 @@ internal object MoviesStorageModule {
     @Provides
     @Singleton
     fun provideFirebaseDatabase(): FirebaseDatabase = Firebase.database(
-        url = "https://moviesandroid-8f137-default-rtdb.europe-west1.firebasedatabase.app/" // TODO: добавить url к БД firebase
+        url = "" // TODO: добавить url к БД firebase
     )
 
     @Provides
