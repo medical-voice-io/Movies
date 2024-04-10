@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.android.movies.features.auth.screen.AuthScreen
 import io.android.movies.features.movies.screen.MoviesScreen
+import io.android.movies.features.profile.screen.ProfileScreen
 import io.android.movies.features.reg.screen.RegScreen
 import io.android.movies.features.splash.screen.SplashScreen
 
@@ -30,6 +31,9 @@ fun NavGraph(navController: NavHostController) {
         }
         composable(route = Screens.Movies.route) {
             MoviesScreen(navController = navController)
+        }
+        composable(route = Screens.Profile.route) {
+            ProfileScreen(navController = navController)
         }
     }
 }

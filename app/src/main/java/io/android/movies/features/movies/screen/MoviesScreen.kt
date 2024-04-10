@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -43,6 +44,7 @@ import io.android.movies.R
 import io.android.movies.features.movies.screen.components.MovieVerticalComponent
 import io.android.movies.features.movies.screen.listeners.MoviesListeners
 import io.android.movies.features.movies.screen.models.MovieUi
+import io.android.movies.navigation.Screens
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -67,6 +69,7 @@ internal fun MoviesScreen(
             ToolbarComponent(
                 state = state,
                 moviesListeners = moviesListeners,
+                navController = navController,
             )
             MoviesContentState(
                 moviesFlow = viewModel.moviesFlow,
@@ -83,6 +86,7 @@ internal fun MoviesScreen(
 internal fun ToolbarComponent(
     state: MoviesState,
     moviesListeners: MoviesListeners,
+    navController: NavController,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -121,6 +125,26 @@ internal fun ToolbarComponent(
 
             Icon(
                 imageVector = Icons.Default.Favorite,
+                tint = tint,
+                contentDescription = null,
+            )
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+        IconButton(
+            onClick = {
+                // Переход в профиль
+                navController.navigate(Screens.Profile.route)
+                // TODO: открыть экран профиля
+            }
+        ) {
+            val tint = if (state.isFilterEnabled) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.outline
+            }
+
+            Icon(
+                imageVector = Icons.Default.Person,
                 tint = tint,
                 contentDescription = null,
             )
