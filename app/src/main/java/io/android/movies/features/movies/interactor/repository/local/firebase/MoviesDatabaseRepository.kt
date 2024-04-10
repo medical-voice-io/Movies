@@ -4,11 +4,13 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import io.android.movies.features.movies.interactor.domain.write.Favorite
 import io.android.movies.features.movies.interactor.domain.write.MoviePreview
 import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository.Companion.CHILD_MOVIES
 import io.android.movies.features.movies.interactor.repository.local.firebase.MoviesLocalRepository.Companion.CHILD_REMOTE_KEY
 import io.android.movies.features.movies.interactor.repository.local.dto.RemoteKey
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -109,6 +111,18 @@ internal class MoviesDatabaseRepository @Inject constructor(
             getReference().child(CHILD_REMOTE_KEY).setValue(null)
             continuation.resume(Unit)
         }
+    }
+
+    override fun getFavoriteFlow(): Flow<List<Favorite>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addToFavorite(movieId: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeFromFavorite(movieId: Int) {
+        TODO("Not yet implemented")
     }
 
     private fun getReference(): DatabaseReference = database.getReference(

@@ -7,6 +7,7 @@ package io.android.movies.features.movies.screen.models
  * @property rating рейтинг фильма
  * @property year год выпуска фильма
  * @property posterUrl ссылка на постер фильма
+ * @property isFavorite флаг избранного
  */
 internal data class MovieUi(
     val id: Int,
@@ -14,4 +15,5 @@ internal data class MovieUi(
     val rating: Double,
     val year: Int,
     val posterUrl: String,
+    val isFavorite: Boolean,
 )

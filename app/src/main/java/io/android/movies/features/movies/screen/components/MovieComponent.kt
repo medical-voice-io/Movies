@@ -80,7 +80,8 @@ internal fun MovieComponent_Preview() {
                 name = "Movie name",
                 rating = 7.5,
                 year = 2021,
-                posterUrl = "https://kinopoiskapiunofficial.tech/images/posters/kp_small/301.jpg"
+                posterUrl = "https://kinopoiskapiunofficial.tech/images/posters/kp_small/301.jpg",
+                isFavorite = false
             )
         )
     }
