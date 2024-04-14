@@ -1,4 +1,6 @@
 package io.android.movies.features.profile.screen.event
 
-class ProfileEvent {
+internal sealed interface  ProfileEvent {
+
+  data object LogOutEvent : ProfileEvent
 }
