@@ -134,7 +134,6 @@ internal fun ToolbarComponent(
             onClick = {
                 // Переход в профиль
                 navController.navigate(Screens.Profile.route)
-                // TODO: открыть экран профиля
             }
         ) {
             val tint = if (state.isFilterEnabled) {

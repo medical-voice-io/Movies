@@ -15,10 +15,16 @@ internal class ProfileAggregate @Inject constructor(
    */
   suspend fun handleCommand(command: ProfileCommand) = when(command) {
     is ProfileCommand.LogOutCommand -> logoutUser()
+    is ProfileCommand.SetNicknameCommand -> setNickname(command.nickname)
   }
 
   private suspend fun logoutUser() =
     withContext(Dispatchers.IO) {
       profileProjector.logoutUser()
+    }
+
+  private suspend fun setNickname(nickname: String) =
+    withContext(Dispatchers.IO) {
+      profileProjector.setNickname(nickname)
     }
 }

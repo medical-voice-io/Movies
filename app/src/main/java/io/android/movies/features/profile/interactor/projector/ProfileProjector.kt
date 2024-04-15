@@ -10,4 +10,14 @@ internal class ProfileProjector @Inject constructor(
   fun logoutUser() {
     localRepository.logout();
   }
+
+  fun setNickname(nickname: String) {
+    localRepository.setNickname(nickname)
+  }
+
+  fun getNickname(): String? {
+    return localRepository.getNickname()
+  }
+
+
 }
