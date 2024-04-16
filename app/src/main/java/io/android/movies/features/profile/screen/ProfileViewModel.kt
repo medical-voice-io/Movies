@@ -1,6 +1,16 @@
 package io.android.movies.features.profile.screen
 
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -16,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -41,6 +52,10 @@ internal class ProfileViewModel @Inject constructor(
     profileProjection.getNickname()?.let {
       _state.value = _state.value.copy(nickname = it)
     }
+    // TODO: Получать фото
+    profileProjection.getAvatar()?.let {
+      _state.value = _state.value.copy(avatar = it)
+    }
   }
 
   fun onNicknameChanged(nickname: String) {
@@ -54,6 +69,12 @@ internal class ProfileViewModel @Inject constructor(
     }
   }
 
+  fun setAvatar(avatar: Uri?) {
+    _state.value = _state.value.copy(avatar = avatar)
+    viewModelScope.launch {
+      profileAggregate.handleCommand(ProfileCommand.SetAvatarCommand(avatar))
+    }
+  }
 
    fun logOut() {
     FirebaseAuth.getInstance().signOut();

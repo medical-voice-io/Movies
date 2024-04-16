@@ -1,5 +1,6 @@
 package io.android.movies.features.profile.interactor.projector
 
+import android.net.Uri
 import io.android.movies.features.profile.interactor.repository.ProfileLocalRepository
 import javax.inject.Inject
 
@@ -17,6 +18,14 @@ internal class ProfileProjector @Inject constructor(
 
   fun getNickname(): String? {
     return localRepository.getNickname()
+  }
+
+  fun getAvatar(): Uri? {
+    return  localRepository.getAvatar()
+  }
+
+  fun  setAvatar(avatar: Uri?) {
+    localRepository.setAvatar(avatar)
   }
 
 
