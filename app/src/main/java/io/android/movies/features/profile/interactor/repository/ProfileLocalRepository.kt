@@ -6,7 +6,6 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,17 +14,37 @@ import javax.inject.Inject
 
 internal interface ProfileLocalRepository {
 
+  /**
+   * Текущий пользователь
+   */
   val currentUser: FirebaseUser?
 
+  /**
+   * Выйти ииз приложения
+   */
   fun logout();
 
+  /**
+   * Установить никнейм
+   * @param nickname никнейм
+   */
   fun setNickname(nickname: String)
 
+  /**
+   * Установить аватар
+   * @param avatar аватар
+   */
+  fun setAvatar(avatar: Uri?)
+
+  /**
+   * Получить аватар
+   */
   fun getAvatar(): Uri?
 
+  /**
+   * Получить никнейм
+   */
   fun getNickname(): String?
-
-  fun setAvatar(avatar: Uri?)
 }
 
 internal class ProfileLocalRepositoryImpl @Inject constructor(
@@ -41,7 +60,7 @@ internal class ProfileLocalRepositoryImpl @Inject constructor(
   }
 
   override fun setNickname(nickname: String) {
-    currentUser.let {user ->
+    currentUser.let { user ->
       val profileUpdate = UserProfileChangeRequest.Builder().setDisplayName(nickname).build()
       CoroutineScope(Dispatchers.IO).launch {
         user?.updateProfile(profileUpdate)
@@ -61,15 +80,12 @@ internal class ProfileLocalRepositoryImpl @Inject constructor(
     val uid = currentUser?.uid
     if (avatar != null) {
 
-      val avatarRef = storage.getReference().child("avatars/$uid")
+      val avatarLocation = storage.getReference().child("avatars/$uid")
 
-      // Загрузите файл аватара по указанному пути
-      avatarRef.putFile(avatar)
-        .addOnSuccessListener { taskSnapshot ->
-          // Загрузка успешна
-          // Получите URL загруженного файла и сохраните его в базе данных или в другом месте
-          avatarRef.downloadUrl.addOnSuccessListener { avatarUrl ->
-            currentUser.let {user ->
+      avatarLocation.putFile(avatar)
+        .addOnSuccessListener {
+          avatarLocation.downloadUrl.addOnSuccessListener { avatarUrl ->
+            currentUser.let { user ->
               val profileUpdate = UserProfileChangeRequest.Builder().setPhotoUri(avatarUrl).build()
               CoroutineScope(Dispatchers.IO).launch {
                 user?.updateProfile(profileUpdate)
@@ -78,19 +94,8 @@ internal class ProfileLocalRepositoryImpl @Inject constructor(
           }
         }
         .addOnFailureListener { exception ->
-          // Ошибка при загрузке аватара
           Log.e(TAG, "Ошибка при загрузке аватара: $exception")
         }
-
-      // По другому сохранять фото
-//      storage.getReference().child("avatars/$uid")
-//        .putFile(avatar)
-//      currentUser.let {user ->
-//        val profileUpdate = UserProfileChangeRequest.Builder().setPhotoUri(avatar).build()
-//        CoroutineScope(Dispatchers.IO).launch {
-//          user?.updateProfile(profileUpdate)
-//        }
-//      }
     }
   }
 

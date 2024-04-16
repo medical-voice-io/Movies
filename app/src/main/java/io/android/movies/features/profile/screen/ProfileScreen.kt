@@ -58,19 +58,16 @@ internal fun ProfileScreen(
 ) {
   val state by profileViewModel.state.collectAsState()
 
-  val scope = rememberCoroutineScope()
-  val snackbarHostState = remember { SnackbarHostState() }
-
   val galleryLauncher =
     rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { image ->
-      if (image != null){
+      if (image != null) {
         profileViewModel.setAvatar(image)
       }
     }
 
   LaunchedEffect(Unit) {
     profileViewModel.event.collect { event ->
-      when(event) {
+      when (event) {
         is ProfileEvent.LogOutEvent -> {
           navController.navigate(Screens.Auth.route)
         }
@@ -79,9 +76,6 @@ internal fun ProfileScreen(
   }
 
   Scaffold(
-    snackbarHost = {
-      SnackbarHost(hostState = snackbarHostState)
-    }
   ) { contentPadding ->
     Column(
       modifier = Modifier
@@ -100,19 +94,16 @@ internal fun ProfileScreen(
             contentDescription = null,
           )
         }
-        // TODO(AndrewVorotyntsev): в строки
         Text(
-//        text = stringResource(id = R.string.profile_title),
-          text= "Профиль",
+          modifier = Modifier.align(Alignment.CenterVertically),
+          text = stringResource(id = R.string.profile_title),
           fontSize = 24.sp
         )
       }
-
       Spacer(modifier = Modifier.height(20.dp))
-
       if (state.avatar != null) {
         AsyncImage(
-          model = state.avatar, //"https://images.wallpapersden.com/image/download/android-brand-logo_Z2hta2aUmZqaraWkpJRnZmtlrWlrbWU.jpg",
+          model = state.avatar,
           contentDescription = null,
           modifier = Modifier
             .clip(
@@ -123,25 +114,10 @@ internal fun ProfileScreen(
                 bottomStart = 20.dp,
               )
             )
-//          .fillMaxWidth()
             .height(200.dp)
             .width(200.dp)
             .align(Alignment.CenterHorizontally)
             .graphicsLayer { alpha = 0.99f }
-            .drawWithContent {
-              val colors = listOf(
-                Color.White,
-                Color.Transparent,
-              )
-              drawContent()
-              drawRect(
-                brush = Brush.verticalGradient(
-                  colors = colors,
-                  startY = 150.dp.toPx()
-                ),
-                blendMode = BlendMode.DstIn
-              )
-            }
             .pointerInput(Unit) {
               detectTapGestures {
                 galleryLauncher.launch("image/*")
@@ -154,48 +130,35 @@ internal fun ProfileScreen(
       FilledTonalButton(onClick = {
         galleryLauncher.launch("image/*")
 
-      }, modifier  = Modifier.align(Alignment.CenterHorizontally) ) {
+      }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
         Text(
-          text = "Загрузить аватар"
+          text = stringResource(id = R.string.load_avatar)
         )
       }
       Spacer(modifier = Modifier.height(20.dp))
       OutlinedTextField(
         value = state.nickname,
         label = {
-          // TODO(AndrewVorotyntsev): в строки
           Text(
-             text= "Никнейм"
-//            text = stringResource(id = R.string.auth_email)
+            text = stringResource(id = R.string.nickname)
           )
         },
         onValueChange = profileViewModel::onNicknameChanged,
-//        enabled = !state.isLoading,
         modifier = Modifier
           .fillMaxWidth()
       )
       FilledTonalButton(onClick = profileViewModel::setNickname) {
         Text(
-          text = "Сохранить имя"
+          text = stringResource(id = R.string.set_nickname)
         )
       }
       Spacer(modifier = Modifier.height(16.dp))
 
       FilledTonalButton(onClick = profileViewModel::logOut) {
         Text(
-          text = "Выйти"
+          text = stringResource(id = R.string.logout)
         )
       }
-
-      // TODO: добавить поля с именем и почтой
-      // TODO:добавить загрузку аватарки
     }
   }
-}
-
-@Preview
-@Composable
-fun ProfileScreen_Preview() {
-  // val navController = rememberNavController()
-  // ProfileScreen(navController)
 }

@@ -21,10 +21,10 @@ internal class ProfileProjector @Inject constructor(
   }
 
   fun getAvatar(): Uri? {
-    return  localRepository.getAvatar()
+    return localRepository.getAvatar()
   }
 
-  fun  setAvatar(avatar: Uri?) {
+  fun setAvatar(avatar: Uri?) {
     localRepository.setAvatar(avatar)
   }
 

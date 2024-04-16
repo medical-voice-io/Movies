@@ -136,15 +136,9 @@ internal fun ToolbarComponent(
                 navController.navigate(Screens.Profile.route)
             }
         ) {
-            val tint = if (state.isFilterEnabled) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.outline
-            }
-
             Icon(
                 imageVector = Icons.Default.Person,
-                tint = tint,
+                tint = MaterialTheme.colorScheme.primary,
                 contentDescription = null,
             )
         }
