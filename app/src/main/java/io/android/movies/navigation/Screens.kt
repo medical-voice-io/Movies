@@ -14,4 +14,7 @@ sealed class Screens(val route: String) {
 
     /** Маршрут экрана фильмов */
     data object Movies : Screens("movies")
+
+    /** Маршрут профиля */
+    data object Profile : Screens("profile")
 }
