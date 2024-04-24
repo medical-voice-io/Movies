@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "292915900445",
-    "project_id": "moviesandroid-8f137",
-    "storage_bucket": "moviesandroid-8f137.appspot.com"
+    "project_number": "141885340769",
+    "project_id": "io-android-movies",
+    "storage_bucket": "io-android-movies.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:292915900445:android:efe76b3c57ee031cb296f4",
+        "mobilesdk_app_id": "1:141885340769:android:d96ab38958f17be551be20",
         "android_client_info": {
           "package_name": "io.android.movies"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBAtUsEbGCG0JFI1loIvMVybHrNOwoL_YY"
+          "current_key": "AIzaSyBXgWqQNmsnPQG_AWBzMqph5M7waEr7rHU"
         }
       ],
       "services": {

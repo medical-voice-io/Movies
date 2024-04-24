@@ -31,14 +31,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import io.android.movies.features.movies.screen.listeners.FavoriteListener
 import io.android.movies.features.movies.screen.models.MovieUi
+import io.android.movies.navigation.Screens
 
 @Composable
 internal fun MovieVerticalComponent(
     movie: MovieUi,
     favoriteListener: FavoriteListener,
+    navController:NavController
 ) {
     Box(
         modifier = Modifier
@@ -47,6 +50,9 @@ internal fun MovieVerticalComponent(
                 color = Color.Gray,
                 shape = RoundedCornerShape(4.dp)
             )
+            .clickable {
+                navController.navigate(Screens.Detailed(movie.id).route)
+            }
     ) {
         Column {
             AsyncImage(

@@ -32,5 +32,7 @@
     <string name="set_nickname">Сохранить никнейм</string>
     <string name="load_avatar">Загрузить аватар</string>
     <string name="logout">Выйти</string>
+    <string name="film_poster_description">Постер фильма</string>
+    <string name="film_details_rating">Рейтинг фильма %1$.1f</string>
     "Загрузить аватар"
 </resources>

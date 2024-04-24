@@ -17,4 +17,7 @@ sealed class Screens(val route: String) {
 
     /** Маршрут профиля */
     data object Profile : Screens("profile")
+
+    /** Маршрут деталки фильма */
+    data class Detailed(val movieId: Int? = null) : Screens( movieId?.let { "detailed/$it" } ?: "detailed/{movieId}" )
 }

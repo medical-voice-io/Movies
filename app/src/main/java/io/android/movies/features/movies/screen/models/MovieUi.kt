@@ -9,7 +9,7 @@ package io.android.movies.features.movies.screen.models
  * @property posterUrl ссылка на постер фильма
  * @property isFavorite флаг избранного
  */
-internal data class MovieUi(
+data class MovieUi(
     val id: Int,
     val name: String,
     val rating: Double,

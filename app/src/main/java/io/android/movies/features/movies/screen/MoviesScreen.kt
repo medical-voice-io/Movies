@@ -69,11 +69,11 @@ internal fun MoviesScreen(
             ToolbarComponent(
                 state = state,
                 moviesListeners = moviesListeners,
-                navController = navController,
             )
             MoviesContentState(
                 moviesFlow = viewModel.moviesFlow,
                 moviesListeners = moviesListeners,
+                navController
             )
         }
     }
@@ -86,7 +86,6 @@ internal fun MoviesScreen(
 internal fun ToolbarComponent(
     state: MoviesState,
     moviesListeners: MoviesListeners,
-    navController: NavController,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -129,19 +128,6 @@ internal fun ToolbarComponent(
                 contentDescription = null,
             )
         }
-        Spacer(modifier = Modifier.width(4.dp))
-        IconButton(
-            onClick = {
-                // Переход в профиль
-                navController.navigate(Screens.Profile.route)
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Person,
-                tint = MaterialTheme.colorScheme.primary,
-                contentDescription = null,
-            )
-        }
     }
 }
 
@@ -180,6 +166,7 @@ internal fun MoviesErrorState(
 internal fun MoviesContentState(
     moviesFlow: Flow<PagingData<MovieUi>>,
     moviesListeners: MoviesListeners,
+    navController: NavController,
 ) {
     val movies = moviesFlow.collectAsLazyPagingItems()
 
@@ -198,7 +185,8 @@ internal fun MoviesContentState(
         else -> {
             MoviesListComponent(
                 movies = movies,
-                moviesListeners = moviesListeners
+                moviesListeners = moviesListeners,
+                navController
             )
         }
     }
@@ -218,7 +206,7 @@ internal fun MoviesLoadingState() {
 
 @Composable
 fun EmptyStateComponent(
-    onRefreshClicked: () -> Unit
+    onRefreshClicked: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -243,6 +231,7 @@ fun EmptyStateComponent(
 internal fun MoviesListComponent(
     movies: LazyPagingItems<MovieUi>,
     moviesListeners: MoviesListeners,
+    navController: NavController,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -257,7 +246,8 @@ internal fun MoviesListComponent(
             movies[index]?.let { movie ->
                 MovieVerticalComponent(
                     movie = movie,
-                    favoriteListener = moviesListeners.favoriteListener
+                    favoriteListener = moviesListeners.favoriteListener,
+                    navController
                 )
             }
         }

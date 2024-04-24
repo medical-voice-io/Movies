@@ -5,7 +5,9 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.view.WindowManager
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
+import com.google.firebase.database.database
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -15,6 +17,7 @@ class MoviesApp : Application() {
         super.onCreate()
 
         FirebaseApp.initializeApp(this)
+        Firebase.database.setPersistenceEnabled(true)
         setupActivityListener()
     }
 
