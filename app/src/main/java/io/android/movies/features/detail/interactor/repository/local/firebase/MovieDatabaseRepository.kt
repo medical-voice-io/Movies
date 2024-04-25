@@ -81,13 +81,13 @@ internal class MovieDatabaseRepository @Inject constructor(
     override suspend fun saveVideos(id: Int, videos: List<MovieVideo>) {
         withContext(Dispatchers.IO) {
             val ref = getVideoReference(id)
-            for (video in videos) {
-                video.url?.also { url ->
-                    ref.child(url).setValue(video)
-                }
+            for (i in videos.indices) {
+                val video = videos[i]
+                ref.child(i.toString()).setValue(video)
             }
         }
     }
+
 
     override suspend fun saveReviews(id: Int, reviews: List<MovieReview>) {
         withContext(Dispatchers.IO) {
